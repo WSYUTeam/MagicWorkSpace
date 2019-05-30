@@ -16,7 +16,7 @@ class Pdodb
             $this->pdo= new PDO($this->Config['dsn'], $this->Config['username'], $this->Config['password']);
             //$dbh = new PDO('mysql:host=localhost;dbname=test', $user, $pass);          
             $this->pdo->query("set names utf8");          
-            echo '数据库链接成功！ ';
+//             echo '数据库链接成功！ ';
         }catch(Exception $e){
             echo '数据库连接失败,详情: ' . $e->getMessage () . ' 请在配置文件中数据库连接信息';
             exit ();            
@@ -43,9 +43,12 @@ class Pdodb
         return $this->res->fetchColumn();       
     }
     //显示数据
+    //$sqlwhere 此可为数组
     public function select($table, $sqlwhere="", $orderby="", $fields="*", $mode=0){
         if(is_array($sqlwhere)){
-            $sqlwhere = ' and '.implode(' and ', $sqlwhere);     
+            $sqlwhere = implode(' and ', $sqlwhere);
+            $sqlwhere = preg_replace('/(\w+)/', '`${1}`', $sqlwhere);
+            $sqlwhere = ' and '.$sqlwhere;     
         }
         if($mode==1) {//统计行数
             $this->query("select count(*) from $table where 1 $sqlwhere");
@@ -56,6 +59,13 @@ class Pdodb
         }
         return $return_result;
     }
+    //显示数据2  , 用在复杂语句上
+    public function query_sql($sql){
+        $this->query($sql);
+        $content = $this->fetchAll();
+        return  $content;
+    }   
+    //数据表，表头
     public function table_columns($table, $Field ='') {
         $this->query("SHOW COLUMNS FROM  `".$table."` WHERE Field != '".$Field."'");
         $columns = $this->fetchAll();         
