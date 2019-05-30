@@ -30,18 +30,39 @@ class Pdodb
     }
     //用于有记录结果返回的操作
     public function query($sql){
-        $this->pdo->query($sql);       
+        $this->res = $this->pdo->query($sql);       
     }
     //添加数据库列
-    public function add_column($cell, $comment){
-        $this->query("ALTER TABLE  `excel_sheet` ADD  `".$cell."` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT  '".$comment."'");
+    public function add_column($table, $cell, $comment){
+        $this->query("ALTER TABLE  $table ADD  `".$cell."` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT  '".$comment."'");
     }
-    //
-//     public function update($sql){
-//         $this->query($sql);
-//     } 
+    public function fetchAll(){
+        return $this->res->fetchAll();        
+    }
+    public function fetchColumn(){
+        return $this->res->fetchColumn();       
+    }
+    //显示数据
+    public function select($table, $sqlwhere="", $orderby="", $fields="*", $mode=0){
+        if(is_array($sqlwhere)){
+            $sqlwhere = ' and '.implode(' and ', $sqlwhere);     
+        }
+        if($mode==1) {//统计行数
+            $this->query("select count(*) from $table where 1 $sqlwhere");
+            $return_result = $this->fetchColumn();
+        } else {
+            $this->query("select $fields from $table where 1 $sqlwhere $orderby");
+            $return_result = $this->fetchAll();
+        }
+        return $return_result;
+    }
+    public function table_columns($table, $Field ='') {
+        $this->query("SHOW COLUMNS FROM  `".$table."` WHERE Field != '".$Field."'");
+        $columns = $this->fetchAll();         
+        return  $columns;
+    }
 }
-
+//测试可以打开
 // $mysql_config=array(
 //     'dsn'=>'mysql:dbname=test;host=localhost',//数据库服务器地址    
 //     'username'=>'root',

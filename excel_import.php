@@ -1,7 +1,8 @@
 <?php
-header("Content-type:text/html;charset=utf-8");//utf-8
-include  "Classes/pinyin.php";
-require_once "Classes/Pdodb.php";
+// header("Content-type:text/html;charset=utf-8");//utf-8
+// include  "Classes/pinyin.php";
+// require_once "Classes/Pdodb.php";
+require_once "inc/config.inc.php";
 // echo pinyin('定义和用法');
 
 $fileName = "excel/hbgydx.xlsx";
@@ -10,14 +11,14 @@ if (!file_exists($fileName)) {
     return ;
 }
 
-//链接数据库
-$mysql_config=array(
-    'dsn'=>'mysql:dbname=excel_db;host=localhost',//数据库服务器地址
-    'username'=>'root',
-    'password'=>'123',
+// //链接数据库
+// $mysql_config=array(
+//     'dsn'=>'mysql:dbname=excel_db;host=localhost',//数据库服务器地址
+//     'username'=>'root',
+//     'password'=>'123',
 
-);
-$mysql_excel = new Pdodb($mysql_config);
+// );
+// $mysql_excel = new Pdodb($mysql_config);
 
 // 引入PHPExcel
 require_once dirname(__FILE__) . "/Classes/PHPExcel/IOFactory.php";
@@ -66,7 +67,7 @@ for ($i = 1; $i <= $row; $i++) {
             $cell = str_replace(" ","_",$cell);
             //"ALTER TABLE  `excel_sheet` ADD  `".$cell."` VARCHAR( 22 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT  '".$comment."'";
             //插入列
-            $mysql_excel ->add_column($cell, $comment);
+            $mysql_excel ->add_column("excel_sheet", $cell, $comment);
             $line_data[] = $cell;
         } else {
 //             echo $str_sub.'<br>';
