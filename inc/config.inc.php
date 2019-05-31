@@ -2,6 +2,8 @@
 header("Content-type:text/html;charset=utf-8");//utf-8
 require_once  "Classes/pinyin.php";
 require_once "Classes/Pdodb.php";
+date_default_timezone_set('PRC');
+
 
 //Á´½ÓÊý¾Ý¿â
 $mysql_config=array(
