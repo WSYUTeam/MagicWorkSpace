@@ -4,6 +4,8 @@ if(!empty($_POST)) {
     //     print_r($_POST);
     $str_post =  implode(' , ', $_POST);
     $str_post = preg_replace('/(\w+)/', '`${1}`', $str_post);
+    //判断提交是否非法
+    $return_result =$mysql_excel ->sql_save($str_post);
     //     echo "select id from `excel_sheet`  Where id not In (Select MIN(id) from `excel_sheet`   GROUP BY  ".$str_post." ASC)   order by id asc";
     $delete_content = $mysql_excel ->query_sql("select id from `excel_sheet`  Where id not In (Select MIN(id) from `excel_sheet`   GROUP BY  ".$str_post." ASC)  ");//order by id asc
     //     print_r($delete_content);
