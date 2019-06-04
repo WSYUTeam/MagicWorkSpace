@@ -23,7 +23,8 @@ $head = $mysql_excel ->table_columns("excel_sheet", "id");
 
 ?>
 <form method="post" action="">
-    <input type="submit"  value="Submit"/> <?php echo iconv('GB2312', 'UTF-8', '总条数').count($data_all);?>
+    <input type="submit"  value="<?php echo iconv('GB2312', 'UTF-8', '排重');?>"/> <?php echo iconv('GB2312', 'UTF-8', '总条数').count($data_all);?>
+     <a href="excel_export.php" style="margin-left: 400px;"><?php echo iconv('GB2312', 'UTF-8', '导出');?></a>
     <table border="1" width="100%">
        <tr>
             <?php 

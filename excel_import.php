@@ -4,8 +4,10 @@
 // require_once "Classes/Pdodb.php";
 require_once "inc/config.inc.php";
 // echo pinyin('定义和用法');
-
-$fileName = "upload_excel/hbgydx.xlsx";
+if (!file_exists($fileName)) { 
+    $fileName = "upload_excel/201905080213041.xls";
+}
+//此句临时加的，需要分开写，不要合并
 if (!file_exists($fileName)) {
     echo "文件不存在!";
     return ;
@@ -103,3 +105,5 @@ for ($i = 1; $i <= $row; $i++) {
 // echo "</pre>";
 echo "<p>";
 $mysql_excel ->close();
+?>
+<p><a href="excel_table.php" style="margin-left: 400px;">查看</a>

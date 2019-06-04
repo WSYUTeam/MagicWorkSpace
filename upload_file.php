@@ -38,6 +38,9 @@ if ((($_FILES["file"]["type"] == "application/vnd.ms-excel")
             echo "文件存储在: " . $position;
 //             print_r($data);
             $mysql_excel ->insert($upload_database_name, $data);
+            //临时先自动关联下，自动生成 
+            $fileName = "upload_excel/$new_file";
+            require_once "excel_import.php";
         }
     }
 } else {
