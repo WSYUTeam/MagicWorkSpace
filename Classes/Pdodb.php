@@ -81,7 +81,28 @@ class Pdodb
             return $return_val;
         }
     }
-    
+    //插入数据
+    //$filed, $value 均为数组
+    public function insert($table, $filed){
+//         if(is_array($filed)) {            
+//             $table = implode(', ', $table);
+            
+//         }
+//         $this->query($sql);
+//         $content = $this->fetchAll();
+//         return  $content;
+//         echo $table;  INSERT INTO `upload_file` VALUES (NULL, 'file_name', NULL, NULL, NULL, NULL);
+        $str_sql = "INSERT INTO `".$table."` (";
+        $str_field = implode(", ", array_keys($filed));
+        $str_sql .= preg_replace('/(\w+)/', '`${1}`', $str_field);
+        $str_sql .= ")";
+        $str_sql .= " VALUES (";
+        $str_sql .= implode(", ", $filed);
+        $str_sql .= " )";
+//         echo $str_sql;
+        $this->query($str_sql);
+//         return "";
+    }
 }
 //测试可以打开
 // $mysql_config=array(

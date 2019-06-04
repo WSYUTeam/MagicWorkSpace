@@ -5,7 +5,7 @@
 require_once "inc/config.inc.php";
 // echo pinyin('定义和用法');
 
-$fileName = "excel/hbgydx.xlsx";
+$fileName = "upload_excel/hbgydx.xlsx";
 if (!file_exists($fileName)) {
     echo "文件不存在!";
     return ;

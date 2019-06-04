@@ -13,3 +13,5 @@ $mysql_config=array(
     
 );
 $mysql_excel = new Pdodb($mysql_config);
+$database_name = 'excel_sheet';
+$upload_database_name = 'upload_file';
