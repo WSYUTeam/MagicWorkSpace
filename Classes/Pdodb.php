@@ -73,6 +73,7 @@ class Pdodb
     }
     //防止sql注入
     public function sql_save($value) {
+        if($value=="`keywords`") $value = '';
         $value = addslashes($value);
         $return_val = preg_match('/select|insert|and|or|create|update|delete|script|alter|=|\(|count|#|\'|\/\*|\*|\.\.\/|\.\/|join|like|union|into|load_file|outfile/i', $value); // 进行过滤
         if($return_val) {
