@@ -54,10 +54,10 @@ if(!is_dir('/home/'.$_SESSION['username'])) {
 						// print_r($user_num);
 						$url_user = '/home/'.$user_num[0].'/'.$user_num[1].'/';
 						echo '<tr><td nowrap>'.$data_space[$i_data]['user_table_content'].' </td>
-						<td nowrap><a href="excel_table.php?user_table_name='.$data_space[$i_data]['user_table_name'].'">查看导入数据</a></td>
+						<td nowrap><a href="excel_table.php?user_table_name='.$data_space[$i_data]['user_table_name'].'">查看处理后数据</a></td>
 						<td nowrap><a href="?paichong='.$data_space[$i_data]['user_table_name'].'_log">排重参照对象</a></td>
 						<td nowrap><a style="color:red" onclick="if(confirm(\'确定要删除--'.$data_space[$i_data]['user_table_content'].'\')){alert(\'界面制作中，别急\');return true;}else{return false;}" href="#">删除</a></td>
-						<td nowrap> <a href="?file_name='.$url_user.'"> 查看'.$data_space[$i_data]['user_table_content'].'导入excel </a> </td>
+						<td nowrap> <a href="?file_name='.$url_user.'"> 查看源文件'.$data_space[$i_data]['user_table_content'].' </a> </td>
 						</tr>';
 				    }
 				?>
