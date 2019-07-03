@@ -1,30 +1,39 @@
 <?php
 require_once "inc/config.inc.php";
+echo "<h2>".$_SESSION['username']." ---";
+if(isset($_GET['user_table_name'])) {
+	$_SESSION['user_table_name'] = $_GET['user_table_name'];
+}
+echo " Ë°®".$_SESSION['user_table_name']."Á©∫Èó¥ &nbsp; &nbsp; &nbsp; &nbsp; <a href='choose_upload.php'>ËøîÂõû‰∏ä‰º†Êñá‰ª∂</a></h2>";
 if(!empty($_POST)) {
     //     print_r($_POST);
-    $str_post =  implode(' , ', $_POST);
+    $str_post = $str_post_log =  implode(' , ', $_POST);
     $str_post = preg_replace('/(\w+)/', '`${1}`', $str_post);
-    //≈–∂œÃ·Ωª «∑Ò∑«∑®
+    //Âà§Êñ≠Êèê‰∫§ÊòØÂê¶ÈùûÊ≥ï
     $return_result =$mysql_excel ->sql_save($str_post);
     //     echo "select id from `excel_sheet`  Where id not In (Select MIN(id) from `excel_sheet`   GROUP BY  ".$str_post." ASC)   order by id asc";
-    $delete_content = $mysql_excel ->query_sql("select id from `excel_sheet`  Where id not In (Select MIN(id) from `excel_sheet`   GROUP BY  ".$str_post." ORDER BY ".$str_post." ASC)  ");//order by id asc
+    $delete_content = $mysql_excel ->query_sql("select id from `".$_SESSION['user_table_name']."`  Where id not In (Select MIN(id) from `".$_SESSION['user_table_name']."`   GROUP BY  ".$str_post." ORDER BY ".$str_post." ASC)  ");//order by id asc
     //     print_r($delete_content);
     for ($i_data=0;$i_data<count($delete_content);$i_data++){
-        //»•÷ÿ
-        $mysql_excel ->query_sql("DELETE FROM `excel_sheet` WHERE id = ".$delete_content[$i_data]['id']);
+        //ÂéªÈáç
+        $mysql_excel ->query_sql("DELETE FROM `".$_SESSION['user_table_name']."` WHERE id = ".$delete_content[$i_data]['id']);
+    }
+    if(count($delete_content)>0) {
+        $str_post_log = preg_replace('/(\w+)/', '${1}', $str_post_log);
+        $mysql_excel ->query("INSERT INTO `".$_SESSION['user_table_name']."_log` (`id`, `log`, `log_person`, `log_date`) VALUES (NULL, '".$str_post_log."', '".$_SESSION['username']."', '".date('Y-m-d H:i:s')."');");
     }
 }
-//∂¡»° ˝æ›–≈œ¢ 
-$data_all = $mysql_excel ->select("excel_sheet", "", "ORDER BY `title` ASC ");
-//º∆ ˝
-$data_column = $mysql_excel ->select("excel_sheet", "", "", "", "1");
-//œ‘ æ±ÌÕ∑,≈≈≥˝÷˜º¸  »Á SHOW COLUMNS FROM  `excel_sheet`
-$head = $mysql_excel ->table_columns("excel_sheet", "id");
+//ËØªÂèñÊï∞ÊçÆ‰ø°ÊÅØ 
+$data_all = $mysql_excel ->select($_SESSION['user_table_name'], "", "ORDER BY `id` ASC ");
+//ËÆ°Êï∞
+$data_column = $mysql_excel ->select($_SESSION['user_table_name'], "", "", "", "1");
+//ÊòæÁ§∫Ë°®Â§¥,ÊéíÈô§‰∏ªÈîÆ  Â¶Ç SHOW COLUMNS FROM  `excel_sheet`
+$head = $mysql_excel ->table_columns($_SESSION['user_table_name'], "id");
 
 ?>
 <form method="post" action="">
-    <input type="submit"  value="<?php echo iconv('GB2312', 'UTF-8', '≈≈÷ÿ');?>"/> <?php echo iconv('GB2312', 'UTF-8', '◊‹Ãı ˝').count($data_all);?>
-     <a href="excel_export.php" style="margin-left: 400px;"><?php echo iconv('GB2312', 'UTF-8', 'µº≥ˆ');?></a>
+    <input type="submit"  value="ÊéíÈáç<?php //echo iconv('GB2312', 'UTF-8', 'ÊéíÈáç');?>"/> ÊÄªÊù°Êï∞<?php //echo iconv('GB2312', 'UTF-8', 'ÊÄªÊù°Êï∞');?><?php echo count($data_all);?>
+     <a href="excel_export.php?user_table_name=<?php echo $_SESSION['user_table_name'];?>" style="margin-left: 400px;">ÂØºÂá∫<?php //echo iconv('GB2312', 'UTF-8', 'ÂØºÂá∫');?></a>
     <table border="1" width="100%">
        <tr>
             <?php 

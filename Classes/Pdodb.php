@@ -47,13 +47,14 @@ class Pdodb
     public function select($table, $sqlwhere="", $orderby="", $fields="*", $mode=0){
         if(is_array($sqlwhere)){
             $sqlwhere = implode(' and ', $sqlwhere);
-            $sqlwhere = preg_replace('/(\w+)/', '`${1}`', $sqlwhere);
+            $sqlwhere = preg_replace('/(\w+)/', '${1}', $sqlwhere);
             $sqlwhere = ' and '.$sqlwhere;     
         }
         if($mode==1) {//统计行数
             $this->query("select count(*) from $table where 1 $sqlwhere");
             $return_result = $this->fetchColumn();
         } else {
+            // echo "select $fields from $table where 1 $sqlwhere $orderby";
             $this->query("select $fields from $table where 1 $sqlwhere $orderby");
             $return_result = $this->fetchAll();
         }
@@ -73,9 +74,8 @@ class Pdodb
     }
     //防止sql注入
     public function sql_save($value) {
-        if($value=="`keywords`") $value = '';
         $value = addslashes($value);
-        $return_val = preg_match('/select|insert|and|or|create|update|delete|script|alter|=|\(|count|#|\'|\/\*|\*|\.\.\/|\.\/|join|like|union|into|load_file|outfile/i', $value); // 进行过滤
+        $return_val = preg_match('/select|insert|and|create|update|delete|script|alter|=|\(|count|#|\'|\/\*|\*|\.\.\/|\.\/|join|like|union|into|load_file|outfile/i', $value); // 进行过滤
         if($return_val) {
             exit('提交的参数非法！');
         } else {
@@ -97,10 +97,11 @@ class Pdodb
         $str_field = implode(", ", array_keys($filed));
         $str_sql .= preg_replace('/(\w+)/', '`${1}`', $str_field);
         $str_sql .= ")";
-        $str_sql .= " VALUES (";
-        $str_sql .= implode(", ", $filed);
-        $str_sql .= " )";
-//         echo $str_sql;
+        $str_sql .= " VALUES (\"";
+        $str_sql .= preg_replace('/(\w+)/', '${1}', implode("\", \"", $filed));
+        // $str_sql .= implode(", ", $filed);
+        $str_sql .= "\" )";
+        // echo $str_sql;
         $this->query($str_sql);
 //         return "";
     }

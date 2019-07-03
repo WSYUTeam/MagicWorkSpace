@@ -1,38 +1,43 @@
 <?php
 require_once "inc/config.inc.php";
 /**
- * Êý¾Ýµ¼³ö
-* @param array $title   ±êÌâÐÐÃû³Æ
-* @param array $data   µ¼³öÊý¾Ý
-* @param string $fileName ÎÄ¼þÃû
-* @param string $savePath ±£´æÂ·¾¶  
-* @param boolean $isDown ÊÇ·ñÏÂÔØ  false--±£´æ   true--ÏÂÔØ
-* @return string   ·µ»ØÎÄ¼þÈ«Â·¾¶
+ * æ•°æ®å¯¼å‡º
+* @param array $title   æ ‡é¢˜è¡Œåç§°
+* @param array $data   å¯¼å‡ºæ•°æ®
+* @param string $fileName æ–‡ä»¶å
+* @param string $savePath ä¿å­˜è·¯å¾„  
+* @param boolean $isDown æ˜¯å¦ä¸‹è½½  false--ä¿å­˜   true--ä¸‹è½½
+* @return string   è¿”å›žæ–‡ä»¶å…¨è·¯å¾„
 * @throws PHPExcel_Exception
 * @throws PHPExcel_Reader_Exception
 */
+if(isset($_GET['user_table_name'])) {
+    $user_table_name = $_GET['user_table_name'];
+} else {
+    exit("è¯·æ­£å¸¸è¿›å…¥è¯¥ç•Œé¢ï¼");
+}
 function exportExcel($title=array(), $data=array(), $fileName='', $savePath='./', $isDown=false){    
     include('Classes/PHPExcel.php');
     $obj = new PHPExcel();  
-    //ºáÏòµ¥Ôª¸ñ±êÊ¶   
+    //æ¨ªå‘å•å…ƒæ ¼æ ‡è¯†   
     $cellName = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'); 
-    $obj->getActiveSheet(0)->setTitle('sheet1');   //ÉèÖÃsheetÃû³Æ    
-    $_row = 1;   //ÉèÖÃ×ÝÏòµ¥Ôª¸ñ±êÊ¶ 
+    $obj->getActiveSheet(0)->setTitle('sheet1');   //è®¾ç½®sheetåç§°    
+    $_row = 1;   //è®¾ç½®çºµå‘å•å…ƒæ ¼æ ‡è¯† 
 //     print_r($data);
 //     exit;
     if($title){       
         $_cnt = count($title);   
-        $obj->getActiveSheet(0)->mergeCells('A'.$_row.':'.$cellName[$_cnt-1].$_row);   //ºÏ²¢µ¥Ôª¸ñ        
-        $obj->setActiveSheetIndex(0)->setCellValue('A'.$_row, ('new_sheet'.date("md-his")));  //ÉèÖÃºÏ²¢ºóµÄµ¥Ôª¸ñÄÚÈÝ       
+        $obj->getActiveSheet(0)->mergeCells('A'.$_row.':'.$cellName[$_cnt-1].$_row);   //åˆå¹¶å•å…ƒæ ¼        
+        $obj->setActiveSheetIndex(0)->setCellValue('A'.$_row, ('new_sheet'.date("md-his")));  //è®¾ç½®åˆå¹¶åŽçš„å•å…ƒæ ¼å†…å®¹       
         $_row++;        
         $i = 0;        
-        foreach($title AS $v){   //ÉèÖÃÁÐ±êÌâ            
+        foreach($title AS $v){   //è®¾ç½®åˆ—æ ‡é¢˜            
             $obj->setActiveSheetIndex(0)->setCellValue($cellName[$i].$_row, $v);            
             $i++;           
         }        
         $_row++;       
     }           
-    //ÌîÐ´Êý¾Ý    
+    //å¡«å†™æ•°æ®    
     if($data){        
         $i = 0;        
         foreach($data AS $_v){           
@@ -44,30 +49,30 @@ function exportExcel($title=array(), $data=array(), $fileName='', $savePath='./'
             $i++;           
         }       
     }        
-    //ÎÄ¼þÃû´¦Àí   
+    //æ–‡ä»¶åå¤„ç†   
     if(!$fileName){        
         $fileName = uniqid(time(),true);       
     }    
     $objWrite = PHPExcel_IOFactory::createWriter($obj, 'Excel2007');   
-    if($isDown){   //ÍøÒ³ÏÂÔØ        
+    if($isDown){   //ç½‘é¡µä¸‹è½½        
         header('pragma:public');        
         header("Content-Disposition:attachment;filename=$fileName.xlsx");        
         $objWrite->save('php://output');exit;        
     }
-    $_fileName = iconv("utf-8", "gb2312", $fileName);   //×ªÂë    
+    $_fileName = iconv("utf-8", "gb2312", $fileName);   //è½¬ç     
     $_savePath = $savePath.$_fileName.'.xlsx';    
     $objWrite->save($_savePath);   
     return $savePath.$fileName.'.xlsx';    
 }
-//ÏÔÊ¾±íÍ·,ÅÅ³ýÖ÷¼ü  Èç SHOW COLUMNS FROM  `excel_sheet`
-$head = $mysql_excel ->table_columns("excel_sheet", "id");
+//æ˜¾ç¤ºè¡¨å¤´,æŽ’é™¤ä¸»é”®  å¦‚ SHOW COLUMNS FROM  `excel_sheet`
+$head = $mysql_excel ->table_columns($user_table_name, "id");
 $str_header = [];
 for ($i=0;$i<count($head);$i++){
     $str_header[] = $head[$i]['Field'];
 }
-//¶ÁÈ¡Êý¾ÝÐÅÏ¢
+//è¯»å–æ•°æ®ä¿¡æ¯
 $str_content = [];
-$data_all = $mysql_excel ->select("excel_sheet", "", "ORDER BY `title` ASC ");
+$data_all = $mysql_excel ->select($user_table_name, "", "ORDER BY `title` ASC ");
 for ($i_data=0;$i_data<count($data_all);$i_data++){
 //     $str_content_e = [];
     for($content_i=0; $content_i<count($str_header); $content_i++) {

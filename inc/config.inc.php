@@ -4,14 +4,26 @@ require_once  "Classes/pinyin.php";
 require_once "Classes/Pdodb.php";
 date_default_timezone_set('PRC');
 
-
-//Á´½ÓÊı¾İ¿â
+//é“¾æ¥æ•°æ®åº“
 $mysql_config=array(
-    'dsn'=>'mysql:dbname=excel_db;host=localhost',//Êı¾İ¿â·şÎñÆ÷µØÖ·
+    'dsn'=>'mysql:dbname=excel_db;host=localhost',//æ•°æ®åº“æœåŠ¡å™¨åœ°å€
     'username'=>'root',
-    'password'=>'123',
+    'password'=>'Wsyu&2018',
     
 );
 $mysql_excel = new Pdodb($mysql_config);
-$database_name = 'excel_sheet';
+
+// if(isset($_SESSION['username']) && basename($_SERVER['PHP_SELF']) != 'login.php') {
+// 	session_start();
+//     // echo "<h2>æ‚¨æ²¡æœ‰æƒé™ç™»é™†è¯¥ç©ºé—´</h2>";
+// } else if(isset($_POST['username']) && basename($_SERVER['PHP_SELF']) == 'choose_upload.php' ) {
+// 	session_start();
+// } else 
+if(basename($_SERVER['PHP_SELF']) != 'login.php' ) {//&& basename($_SERVER['PHP_SELF']) != 'choose_upload.php'
+	session_start();
+	if(!isset($_SESSION['username']) && !isset($_POST['username'])) {
+		exit ("<h2>æ‚¨æ²¡æœ‰æƒé™ç™»é™†è¯¥ç©ºé—´!!</h2>");
+	}
+}
+
 $upload_database_name = 'upload_file';

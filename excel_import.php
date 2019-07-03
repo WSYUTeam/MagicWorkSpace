@@ -4,8 +4,8 @@
 // require_once "Classes/Pdodb.php";
 require_once "inc/config.inc.php";
 // echo pinyin('定义和用法');
-if (!file_exists($fileName)) { 
-    $fileName = "upload_excel/201905080213041.xls";
+if (!isset($fileName)) { 
+    $fileName = "/home/upload_excel/201905080213041.xls";
 }
 //此句临时加的，需要分开写，不要合并
 if (!file_exists($fileName)) {
@@ -42,7 +42,7 @@ for ($i = 1; $i <= $row; $i++) {
     $line_data = [];
     // 列数循环
     $str_sub = 0;
-    $str_sql_field = "INSERT INTO `excel_sheet` (";
+    $str_sql_field = "INSERT INTO `$database_name` (";
     $str_sql_value = " VALUES (";
     for ($c = 'A'; $c <= $column; $c++) {
         $get_cell = $phpExcel->getActiveSheet()->getCell($c . $i);
@@ -69,7 +69,7 @@ for ($i = 1; $i <= $row; $i++) {
             $cell = str_replace(" ","_",$cell);
             //"ALTER TABLE  `excel_sheet` ADD  `".$cell."` VARCHAR( 22 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT  '".$comment."'";
             //插入列
-            $mysql_excel ->add_column("excel_sheet", $cell, $comment);
+            $mysql_excel ->add_column("$database_name", $cell, $comment);
             $line_data[] = $cell;
         } else {
 //             echo $str_sub.'<br>';
