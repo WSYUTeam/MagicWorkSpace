@@ -72,7 +72,7 @@ for ($i=0;$i<count($head);$i++){
 }
 //读取数据信息
 $str_content = [];
-$data_all = $mysql_excel ->select($user_table_name, "", "ORDER BY `title` ASC ");
+$data_all = $mysql_excel ->select($user_table_name, "", "ORDER BY `id` ASC ");
 for ($i_data=0;$i_data<count($data_all);$i_data++){
 //     $str_content_e = [];
     for($content_i=0; $content_i<count($str_header); $content_i++) {
