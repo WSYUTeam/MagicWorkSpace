@@ -34,7 +34,7 @@ $head = $mysql_excel ->table_columns($_SESSION['user_table_name'], "id");
 <form method="post" action="">
     <input type="submit"  value="排重<?php //echo iconv('GB2312', 'UTF-8', '排重');?>"/> 总条数<?php //echo iconv('GB2312', 'UTF-8', '总条数');?><?php echo count($data_all);?>
      <a href="excel_export.php?user_table_name=<?php echo $_SESSION['user_table_name'];?>" style="margin-left: 400px;">导出<?php //echo iconv('GB2312', 'UTF-8', '导出');?></a>
-    <table border="1" width="100%">
+    <table border="1" width="100%" style="font-size: 12px">
        <tr>
             <?php 
             $str_header = [];
@@ -52,7 +52,7 @@ $head = $mysql_excel ->table_columns($_SESSION['user_table_name'], "id");
       for ($i_data=0;$i_data<count($data_all);$i_data++){ 
             echo '<tr>';
             for($content_i=0; $content_i<count($str_header); $content_i++) {
-                echo '<td height="22"  valign="middle">';
+                echo '<td   valign="middle">';
                 echo $data_all[$i_data][$str_header[$content_i]];
                 echo '</td>';
             }

@@ -3,10 +3,14 @@
 // include  "Classes/pinyin.php";
 // require_once "Classes/Pdodb.php";
 require_once "inc/config.inc.php";
+ini_set('memory_limit', '-1');
 // echo pinyin('定义和用法');
 if (!isset($fileName)) { 
-    $fileName = "/home/upload_excel/201905080213041.xls";
+    $fileName = "";
 }
+// if (isset($_GET['file_name'])) { 
+//     $fileName = $_GET['file_name'];
+// }
 //此句临时加的，需要分开写，不要合并
 if (!file_exists($fileName)) {
     echo "文件不存在!";
@@ -35,6 +39,7 @@ $row = $phpExcel->getActiveSheet()->getHighestRow();
 // 获取列数
 $column = $phpExcel->getActiveSheet()->getHighestColumn();
 // echo  "表格数目为：$sheetCount" . "表格的行数：$row" . "列数：$column";
+        // echo  PHPExcel_Cell::columnIndexFromString($column);  //将列数转换为数字 列数大于Z的必须转  A->1  AA->27 ."<br>";
 
 $data = [];
 // 行数循环
@@ -44,7 +49,8 @@ for ($i = 1; $i <= $row; $i++) {
     $str_sub = 0;
     $str_sql_field = "INSERT INTO `$database_name` (";
     $str_sql_value = " VALUES (";
-    for ($c = 'A'; $c <= $column; $c++) {
+    // for ($c = 'A'; $c <= $column; $c++) {
+    for ($c = 'A'; $c <= 1; $c++) {//写1可以无限制的循环，在结尾让其跳出
         $get_cell = $phpExcel->getActiveSheet()->getCell($c . $i);
         // 获取excel 的文本
          $cell = $get_cell->getValue();
@@ -88,6 +94,9 @@ for ($i = 1; $i <= $row; $i++) {
 //             echo $line_data[$data[0][$str_sub]].'<br>';
             $str_sub++;
         }     
+        if($c=='IV') {
+        	break;
+        }
     }
     //组装的sql语句，调试时打开
 //     echo $str_sql_field.$str_sql_value.'<p>';

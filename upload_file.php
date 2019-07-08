@@ -7,7 +7,7 @@ if(!isset($_FILES["file"]) ) {
 }
 unset($_SESSION['user_table_name']);
 // 允许上传的图片后缀
-$allowedExts = array("xls", "xlsx");
+$allowedExts = array("xls", "xlsx", "csv");
 $temp = explode(".", $_FILES["file"]["name"]);
 // echo $_FILES["file"]["size"];
 $extension = end($temp);     // 获取文件后缀名
@@ -38,20 +38,20 @@ if(empty($_POST['post_table_name'])) {
     //excel导入的数据表名
     $database_name = $_SESSION['user_table_name'] = $data_record['user_table_name'];
     // 创建文件空间
-    $new_position  = "/home/".$_SESSION['username']."/".$max_table_number."/";
+    $new_position  = "../upload_excel/".$_SESSION['username']."/".$max_table_number."/";
     mkdir($new_position, 0777);
     //创建新数据表和新文件夹 ------END
 } else {
     $database_name = $_SESSION['user_table_name'] = $_POST['post_table_name'];
     $max_table_numbers = explode("_",$_POST['post_table_name']);
     $max_table_number = $max_table_numbers[1];
-    $new_position  = "/home/".$_SESSION['username']."/".$max_table_number."/";
+    $new_position  = "../upload_excel/".$_SESSION['username']."/".$max_table_number."/";
 }
 echo " 表".$max_table_number."空间 &nbsp; &nbsp; &nbsp; &nbsp; <a href='choose_upload.php'>返回上传文件</a></h2>";// 
 // 提交文件 -----START
 if ((($_FILES["file"]["type"] == "application/vnd.ms-excel")
     || ($_FILES["file"]["type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-    && ($_FILES["file"]["size"] < 204800)   // 小于 200 Mb
+    && ($_FILES["file"]["size"] < 20480000)   // 小于 200 Mb
     && in_array($extension, $allowedExts)) {
     if ($_FILES["file"]["error"] > 0) {
         echo "错误：: " . $_FILES["file"]["error"] . "<br>";
